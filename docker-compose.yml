@@ -3,8 +3,8 @@ services:
     image: mysql:latest
 
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: devops
+      MYSQL_ROOT_PASSWORD:  ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
 
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
@@ -14,7 +14,7 @@ services:
       start_period: 30s
 
     volumes:
-      - mysql-data:/var/lib/mysql
+      - C:\Users\HP\Desktop\backup:/var/lib/mysql
 
     networks:
       - two-tier
@@ -24,12 +24,12 @@ services:
 
     environment:
       MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_DB: devops
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD:  ${MYSQL_PASSWORD}
+      MYSQL_DB: ${MYSQL_DB}
 
     ports:
-      - "5000:5000"
+      - "80:5000"
 
     depends_on:
       - mysql
@@ -42,5 +42,3 @@ services:
 networks:
   two-tier:
 
-volumes:
-  mysql-data:
