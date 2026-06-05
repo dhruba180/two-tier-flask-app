@@ -7,7 +7,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DB}
 
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
       interval: 7s
       timeout: 30s
       retries: 5
