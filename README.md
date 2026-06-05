@@ -1,130 +1,114 @@
- 
-# Flask App with MySQL Docker Setup
+# Two-Tier Flask Application Deployment
 
-This is a simple Flask app that interacts with a MySQL database. The app allows users to submit messages, which are then stored in the database and displayed on the frontend.
+## Overview
 
-## Prerequisites
+This project demonstrates the deployment of a two-tier web application using Flask and MySQL. The application is containerized using Docker, orchestrated with Docker Compose, and includes Kubernetes and Amazon EKS deployment manifests.
 
-Before you begin, make sure you have the following installed:
+## Architecture
 
-- Docker
-- Git (optional, for cloning the repository)
+The application consists of two components:
 
-## Setup
+1. Flask Web Application
+2. MySQL Database
 
-1. Clone this repository (if you haven't already):
+The Flask application communicates with the MySQL database to store and retrieve messages.
 
-   ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   ```
+## Technologies Used
 
-2. Navigate to the project directory:
+* Python Flask
+* MySQL
+* Docker
+* Docker Compose
+* Kubernetes
+* Amazon EKS
+* Git & GitHub
 
-   ```bash
-   cd your-repo-name
-   ```
+## Project Structure
 
-3. Create a `.env` file in the project directory to store your MySQL environment variables:
+```text
+two-tier-flask-app/
+├── app.py
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── .env
+├── k8s/
+├── eks-manifests/
+└── templates/
+```
 
-   ```bash
-   touch .env
-   ```
+## Features
 
-4. Open the `.env` file and add your MySQL configuration:
+* Containerized Flask application
+* MySQL database integration
+* Docker Compose multi-container deployment
+* Environment variable configuration
+* Kubernetes deployment manifests
+* Amazon EKS deployment configuration
+* Persistent database storage using Docker volumes
 
-   ```
-   MYSQL_HOST=mysql
-   MYSQL_USER=your_username
-   MYSQL_PASSWORD=your_password
-   MYSQL_DB=your_database
-   ```
+## Running with Docker Compose
 
-## Usage
-
-1. Start the containers using Docker Compose:
-
-   ```bash
-   docker-compose up --build
-   ```
-
-2. Access the Flask app in your web browser:
-
-   - Frontend: http://localhost
-   - Backend: http://localhost:5000
-
-3. Create the `messages` table in your MySQL database:
-
-   - Use a MySQL client or tool (e.g., phpMyAdmin) to execute the following SQL commands:
-   
-     ```sql
-     CREATE TABLE messages (
-         id INT AUTO_INCREMENT PRIMARY KEY,
-         message TEXT
-     );
-     ```
-
-4. Interact with the app:
-
-   - Visit http://localhost to see the frontend. You can submit new messages using the form.
-   - Visit http://localhost:5000/insert_sql to insert a message directly into the `messages` table via an SQL query.
-
-## Cleaning Up
-
-To stop and remove the Docker containers, press `Ctrl+C` in the terminal where the containers are running, or use the following command:
+### Clone Repository
 
 ```bash
-docker-compose down
+git clone https://github.com/dhruba180/two-tier-flask-app.git
+cd two-tier-flask-app
 ```
 
-## To run this two-tier application using  without docker-compose
+### Build and Start Containers
 
-- First create a docker image from Dockerfile
 ```bash
-docker build -t flaskapp .
+docker compose up -d --build
 ```
 
-- Now, make sure that you have created a network using following command
+### Verify Containers
+
 ```bash
-docker network create twotier
+docker ps
 ```
 
-- Attach both the containers in the same network, so that they can communicate with each other
+### Access Application
 
-i) MySQL container 
+```text
+http://localhost:5000
+```
+
+## Kubernetes Deployment
+
+Apply Kubernetes manifests:
+
 ```bash
-docker run -d \
-    --name mysql \
-    -v mysql-data:/var/lib/mysql \
-    --network=twotier \
-    -e MYSQL_DATABASE=mydb \
-    -e MYSQL_ROOT_PASSWORD=admin \
-    -p 3306:3306 \
-    mysql:5.7
-
+kubectl apply -f k8s/
 ```
-ii) Backend container
+
+Verify resources:
+
 ```bash
-docker run -d \
-    --name flaskapp \
-    --network=twotier \
-    -e MYSQL_HOST=mysql \
-    -e MYSQL_USER=root \
-    -e MYSQL_PASSWORD=admin \
-    -e MYSQL_DB=mydb \
-    -p 5000:5000 \
-    flaskapp:latest
-
+kubectl get pods
+kubectl get services
 ```
 
-## Notes
+## Amazon EKS Deployment
 
-- Make sure to replace placeholders (e.g., `your_username`, `your_password`, `your_database`) with your actual MySQL configuration.
+Deploy application using manifests inside:
 
-- This is a basic setup for demonstration purposes. In a production environment, you should follow best practices for security and performance.
-
-- Be cautious when executing SQL queries directly. Validate and sanitize user inputs to prevent vulnerabilities like SQL injection.
-
-- If you encounter issues, check Docker logs and error messages for troubleshooting.
-
+```text
+eks-manifests/
 ```
 
+## Learning Outcomes
+
+* Docker image creation
+* Multi-container application deployment
+* Container networking
+* Environment variable management
+* Kubernetes deployments and services
+* Amazon EKS basics
+* Git and GitHub workflow
+
+## Author
+
+Dhruba Dey
+
+GitHub: https://github.com/dhruba180
